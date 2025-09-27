@@ -1,6 +1,6 @@
 from django.db import models
 from rest_framework.response import Response
-from news.services import fetch_articles
+
 
 class News(models.Model):
     source_id = models.UUIDField(
@@ -42,6 +42,15 @@ class News(models.Model):
     content = models.TextField(
         verbose_name="содержание",
         max_length=500,
+    )
+
+    image = models.URLField(
+        blank=True, 
+        null=True)
+
+    published_at = models.DateTimeField(
+        blank=True, 
+        null=True,
     )
     
 from django.db import models

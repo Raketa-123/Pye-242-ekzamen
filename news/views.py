@@ -1,8 +1,10 @@
 import requests
+from django.shortcuts import render, get_object_or_404
 from django.core.cache import cache
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Article
+from news.models import Article, News
+from news.services import fetch_articles
 
 API_KEY = "1057e1f435f4492ea38c991ab70379c5"
 API_URL = f"https://newsapi.org/v2/everything?domains=wsj.com&apiKey={API_KEY}"
@@ -30,3 +32,13 @@ class ArticleListView(APIView):
         cache.set("articles", articles, timeout=60 * 30)
 
         return Response(articles)
+
+
+def news_list(request):
+    fetch_articles()
+    qs = News.objects.all().order_by('-published_at')
+    return render(request, 'news/news_list.html', {'news_list': qs})
+
+def news_detail(request, pk):
+    news = get_object_or_404(News, pk=pk)
+    return render(request, 'news/news_detail.html', {'news': news})

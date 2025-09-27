@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Новости{% endblock %}
+
+{% block content %}
+<h1>Новости</h1>
+{% if news_list %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for news in news_list %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if news.image %}
+                        <img src="{{ news.image }}" class="card-img-top" alt="Изображение">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <p class="card-text">{{ news.description|truncatewords:25 }}</p>
+                        <a href="{% url 'news_detail' news.id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Новостей пока нет.</p>
+{% endif %}
+{% endblock %}
